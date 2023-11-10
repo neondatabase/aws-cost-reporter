@@ -2,7 +2,7 @@
 
 Posts daily AWS cost data to a Slack channel.
 
-![image](aws-cost-reporter.jpg "AWS Cost Reporter")
+<img src="aws-cost-reporter.jpg" width="450">
 
 ## Test run
 
