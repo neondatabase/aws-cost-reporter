@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   golangci:
     name: golangci-lint
@@ -15,14 +18,12 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version-file: 'go.mod'
-      - uses: golangci/golangci-lint-action@v3
+          cache: false
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
         with:
-          # Required: the version of golangci-lint is required and
-          # should be specified with patch version.
-          version: v1.52.2
-          args: --timeout 5m --fix
-          github-token: ${{ secrets.github_token }}
-          # caching issues, see: https://github.com/golangci/golangci-lint-action/issues/244#issuecomment-1052190775
+          install-mode: 'binary'
+          version: 'latest'
           skip-pkg-cache: true
           skip-build-cache: true
 
