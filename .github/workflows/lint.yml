@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   golangci:
     name: golangci-lint
@@ -15,14 +18,12 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version-file: 'go.mod'
-      - uses: golangci/golangci-lint-action@v3
+          cache: false
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
         with:
-          # Required: the version of golangci-lint is required and
-          # should be specified with patch version.
-          version: v1.52.2
-          args: --timeout 5m --fix
-          github-token: ${{ secrets.github_token }}
-          # caching issues, see: https://github.com/golangci/golangci-lint-action/issues/244#issuecomment-1052190775
+          install-mode: 'binary'
+          version: 'latest'
           skip-pkg-cache: true
           skip-build-cache: true
 
@@ -53,7 +54,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
-      - uses: codespell-project/actions-codespell@94259cd8be02ad2903ba34a22d9c13de21a74461 # v2.0
+      - uses: codespell-project/actions-codespell@v2
         with:
           check_hidden: true
-          skip: go.sum
+          skip: go.sum,.git

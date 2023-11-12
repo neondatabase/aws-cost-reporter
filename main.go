@@ -54,7 +54,7 @@ func getUsage(ce *costexplorer.Client, date time.Time) ([]usageData, error) {
 	}
 
 	monthData := resp.ResultsByTime[0].Groups
-	sort.Slice(monthData[:], func(i, j int) bool {
+	sort.Slice(monthData, func(i, j int) bool {
 		a, _ := strconv.ParseFloat(*monthData[i].Metrics["UnblendedCost"].Amount, 64)
 		b, _ := strconv.ParseFloat(*monthData[j].Metrics["UnblendedCost"].Amount, 64)
 		return a > b
@@ -129,7 +129,7 @@ func getAvgSummaryForSevenDays(ce *costexplorer.Client, date time.Time) (string,
 	total = 0
 	for _, day := range summary {
 		f, _ := strconv.ParseFloat(day, 64)
-		total = total + f
+		total += f
 	}
 	return fmt.Sprintf("%.0f", total/float64(7)), nil
 }
@@ -162,7 +162,7 @@ func getAvgSummaryFor30Days(ce *costexplorer.Client, date time.Time) (string, er
 	total = 0
 	for _, day := range summary {
 		f, _ := strconv.ParseFloat(day, 64)
-		total = total + f
+		total += f
 	}
 	return fmt.Sprintf("%.0f", total/float64(30)), nil
 }
@@ -369,17 +369,17 @@ func main() {
 		Color: "good",
 		Fields: []slack.AttachmentField{
 			slack.AttachmentField{
-				Title: fmt.Sprintf("%s", now.AddDate(0, 0, -1).Format("January 2")),
+				Title: now.AddDate(0, 0, -1).Format("January 2"),
 				Value: fmt.Sprintf("$%s (%s)", daySummary, dailyChange),
 				Short: true,
 			},
 			slack.AttachmentField{
-				Title: fmt.Sprintf("7-Day Avg."),
+				Title: "7-Day Avg.",
 				Value: fmt.Sprintf("$%s (%s)", sevenDaysAvg, sevenDaysChange),
 				Short: true,
 			},
 			slack.AttachmentField{
-				Title: fmt.Sprintf("30-Day Avg."),
+				Title: "30-Day Avg.",
 				Value: fmt.Sprintf("$%s (%s)", thirtyDaysAvg, thirtyDaysChange),
 				Short: true,
 			},
