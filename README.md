@@ -8,7 +8,7 @@ Posts daily AWS cost data to a Slack channel.
 
 ### Pre-requirements
 
-Export necessary environtment variables about Slack
+Export necessary environment variables about Slack
 
 ```consile
 export SLACK_TOKEN="xoxb-1234567890123-123..."

@@ -18,7 +18,7 @@ import (
 	"github.com/slack-go/slack"
 )
 
-// covert string to float to string for formatting
+// convert string to float to string for formatting
 func formatNumberWithoutDecimals(s *string) string {
 	f, _ := strconv.ParseFloat(*s, 64)
 	return fmt.Sprintf("%.0f", f)
@@ -26,7 +26,7 @@ func formatNumberWithoutDecimals(s *string) string {
 
 type usageData struct {
 	ServiceName string
-	Ammount     string
+	Amount      string
 }
 
 // get AWS Usage for specific month sorted by AWS Service Names
@@ -61,7 +61,7 @@ func getUsage(ce *costexplorer.Client, date time.Time) ([]usageData, error) {
 	})
 	for _, service := range monthData {
 		cost := formatNumberWithoutDecimals(service.Metrics["UnblendedCost"].Amount)
-		usage = append(usage, usageData{ServiceName: service.Keys[0], Ammount: cost})
+		usage = append(usage, usageData{ServiceName: service.Keys[0], Amount: cost})
 	}
 	return usage, nil
 }
@@ -344,8 +344,8 @@ func main() {
 		log.Fatal(err)
 	}
 	for _, s := range usage {
-		if s.Ammount != "0" {
-			log.Printf("service: '%s', cost: $%s", s.ServiceName, s.Ammount)
+		if s.Amount != "0" {
+			log.Printf("service: '%s', cost: $%s", s.ServiceName, s.Amount)
 		}
 	}
 
@@ -409,7 +409,7 @@ func main() {
 		},
 	}
 
-	// message attachment with top5 AWS Servies cost details
+	// message attachment with top5 AWS Services cost details
 	fields := []slack.AttachmentField{}
 	size := len(usage)
 	if size > 5 {
@@ -418,7 +418,7 @@ func main() {
 	for _, s := range usage[:size] {
 		fields = append(fields, slack.AttachmentField{
 			Title: s.ServiceName,
-			Value: fmt.Sprintf("$%s", s.Ammount),
+			Value: fmt.Sprintf("$%s", s.Amount),
 			Short: false,
 		})
 	}
